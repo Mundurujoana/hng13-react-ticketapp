@@ -3,8 +3,8 @@ import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import Toast from "../components/Toast";
 import Modal from "../components/Modal";
+import { AnimatePresence, motion } from "framer-motion";
 import { Link } from "react-router-dom";
-import { motion, AnimatePresence } from "framer-motion";
 
 type TicketStatus = "open" | "in_progress" | "closed";
 
@@ -22,8 +22,8 @@ const TicketManagement: React.FC = () => {
   const [modalOpen, setModalOpen] = useState(false);
   const [confirmDeleteModalOpen, setConfirmDeleteModalOpen] = useState(false);
   const [toast, setToast] = useState<{ message: string; type?: "success" | "error" } | null>(null);
-  const quickActionRef = useRef<HTMLDivElement>(null);
   const [quickOpen, setQuickOpen] = useState(false);
+  const quickRef = useRef<HTMLDivElement>(null);
 
   // Form state
   const [title, setTitle] = useState("");
@@ -35,10 +35,10 @@ const TicketManagement: React.FC = () => {
     setTickets(savedTickets);
   }, []);
 
-  // Close quick action if clicked outside
+  // Close quick actions if clicked outside
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
-      if (quickActionRef.current && !quickActionRef.current.contains(event.target as Node)) {
+      if (quickRef.current && !quickRef.current.contains(event.target as Node)) {
         setQuickOpen(false);
       }
     };
@@ -147,6 +147,12 @@ const TicketManagement: React.FC = () => {
               onChange={(e) => setSearch(e.target.value)}
               className="flex-grow border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-300"
             />
+            <button
+              onClick={openModalForCreate}
+              className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition"
+            >
+              + New Ticket
+            </button>
           </div>
         </div>
 
@@ -188,6 +194,37 @@ const TicketManagement: React.FC = () => {
           )}
         </div>
       </main>
+
+      {/* Floating Quick Action */}
+      <div ref={quickRef} className="fixed bottom-32 right-8 z-50 flex flex-col items-end gap-3">
+        <AnimatePresence>
+          {quickOpen && (
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: 20 }}
+              transition={{ duration: 0.4 }}
+            >
+              <Link
+                to="/dashboard"
+                className="bg-gradient-to-r from-gray-700 via-gray-900 to-black text-white px-5 py-3 rounded-lg shadow-lg font-medium text-center w-40 sm:w-48 transition"
+              >
+                Go to Dashboard
+              </Link>
+            </motion.div>
+          )}
+        </AnimatePresence>
+
+        {/* Main Button */}
+        <button
+          onClick={() => setQuickOpen(!quickOpen)}
+          className={`w-16 h-16 rounded-full bg-gradient-to-br from-blue-500 to-indigo-600 text-white text-4xl flex items-center justify-center shadow-xl hover:shadow-2xl transition-transform transform ${
+            quickOpen ? "rotate-45" : "rotate-0"
+          }`}
+        >
+          +
+        </button>
+      </div>
 
       {/* Modals */}
       <Modal
@@ -253,41 +290,7 @@ const TicketManagement: React.FC = () => {
         </div>
       </Modal>
 
-      {/* Toast Notification */}
       {toast && <Toast message={toast.message} type={toast.type} onClose={() => setToast(null)} />}
-
-      {/* Floating Quick Action Button */}
-      <div className="fixed bottom-28 right-8 z-50" ref={quickActionRef}>
-        {/* Main Button */}
-        <button
-          onClick={() => setQuickOpen(!quickOpen)}
-          className={`w-16 h-16 rounded-full bg-blue-600 text-white text-4xl flex items-center justify-center shadow-lg hover:bg-blue-700 transition-transform transform ${
-            quickOpen ? "rotate-45" : "rotate-0"
-          }`}
-        >
-          +
-        </button>
-
-        {/* Dropdown Actions */}
-        <AnimatePresence>
-          {quickOpen && (
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: 20 }}
-              transition={{ duration: 0.4 }}
-              className="absolute bottom-20 right-0 flex flex-col gap-3"
-            >
-              <Link
-                to="/dashboard"
-                className="bg-gray-900 text-white px-5 py-2 rounded-lg shadow hover:bg-gray-800 transition font-medium text-center"
-              >
-                Go to Dashboard
-              </Link>
-            </motion.div>
-          )}
-        </AnimatePresence>
-      </div>
 
       <Footer />
     </div>

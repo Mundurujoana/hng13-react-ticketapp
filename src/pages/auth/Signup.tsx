@@ -9,7 +9,7 @@ const Signup: React.FC = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
-  const [error, setError] = useState("");
+  const [error, setError] = useState(""); // now actually displayed
   const [toastMessage, setToastMessage] = useState("");
   const [toastType, setToastType] = useState<"success" | "error">("success");
 
@@ -45,7 +45,7 @@ const Signup: React.FC = () => {
     setToastType("success");
     setToastMessage("Account created successfully! Redirecting to login...");
 
-    setTimeout(() => navigate("/auth/login"), 1500);
+    setTimeout(() => navigate("/auth/login"), 1500); // navigate is used
   };
 
   return (
@@ -73,6 +73,10 @@ const Signup: React.FC = () => {
         transition={{ duration: 0.7, ease: "easeOut" }}
       >
         <h1 className="text-3xl font-extrabold mb-4 text-gray-900 text-center">Sign Up</h1>
+
+        {/* Display error */}
+        {error && <p className="text-red-600 text-sm text-center">{error}</p>}
+
         <input
           type="email"
           placeholder="Email"

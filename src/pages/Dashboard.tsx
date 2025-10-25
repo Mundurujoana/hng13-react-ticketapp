@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import { useNavigate, Link } from "react-router-dom";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import { motion } from "framer-motion";
@@ -13,7 +12,6 @@ interface Ticket {
 }
 
 const Dashboard: React.FC = () => {
-  const navigate = useNavigate();
   const [tickets, setTickets] = useState<Ticket[]>([]);
 
   useEffect(() => {

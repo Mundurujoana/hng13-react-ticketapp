@@ -8,7 +8,7 @@ const Login: React.FC = () => {
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [error, setError] = useState("");
+  const [error, setError] = useState(""); // displayed in JSX
   const [toastMessage, setToastMessage] = useState("");
   const [toastType, setToastType] = useState<"success" | "error">("error");
 
@@ -30,7 +30,7 @@ const Login: React.FC = () => {
       localStorage.setItem("ticketapp_session", JSON.stringify({ email }));
       setToastType("success");
       setToastMessage("Login successful! Redirecting...");
-      setTimeout(() => navigate("/dashboard"), 1500);
+      setTimeout(() => navigate("/dashboard"), 1500); // navigate is used
     } else {
       setError("Invalid email or password.");
       setToastType("error");
@@ -63,6 +63,10 @@ const Login: React.FC = () => {
         transition={{ duration: 0.7, ease: "easeOut" }}
       >
         <h1 className="text-3xl font-extrabold mb-4 text-gray-900 text-center">Login</h1>
+
+        {/* Display error */}
+        {error && <p className="text-red-600 text-sm text-center">{error}</p>}
+
         <input
           type="email"
           placeholder="Email"

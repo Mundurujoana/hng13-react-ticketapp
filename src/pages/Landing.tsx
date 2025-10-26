@@ -105,7 +105,7 @@ const Landing: React.FC = () => {
             Login
           </Link>
           <Link
-            to="/auth/signup"
+            to="/auth/login"
             className="w-full sm:w-auto border-2 border-blue-600 text-blue-600 px-6 py-3 rounded-xl hover:bg-blue-50 hover:scale-105 transition-all duration-300 font-medium shadow-sm hover:shadow-md focus:outline-none focus:ring-4 focus:ring-blue-200"
           >
             Get Started
